@@ -3,12 +3,12 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
-  base: "/himanshu-portfolio/",
+  base: process.env.GITHUB_ACTIONS ? "/himanshu-portfolio/" : "/",
   plugins: [react(), tailwindcss()],
   server: {
     port: 1573,
     strictPort: true,
-    open: "/himanshu-portfolio/",
+    open: true,
   },
   preview: {
     port: 1573,
