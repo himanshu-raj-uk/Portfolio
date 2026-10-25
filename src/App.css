@@ -1,0 +1,765 @@
+@import "tailwindcss";
+
+.line-clamp-3 {
+  line-clamp: 3;
+}
+
+/* ========================================
+   GLOBAL RESET
+======================================== */
+
+:root {
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  font-optical-sizing: auto;
+  font-weight: 400;
+
+  --transition-theme: 500ms ease;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  min-height: 100%;
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+}
+
+body,
+button,
+input,
+textarea,
+select {
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+button,
+a,
+input,
+textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img,
+svg,
+video,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--selection-text);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
+/* ========================================
+   THEME TOKENS — SPACE / DARK
+======================================== */
+
+:root,
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --page-bg: #02040d;
+  --page-bg-secondary: #050b1b;
+
+  --surface: rgba(9, 16, 38, 0.78);
+  --surface-solid: #091326;
+  --surface-hover: rgba(25, 40, 77, 0.86);
+
+  --text-primary: #f4f6ff;
+  --text-secondary: #a5b4d3;
+  --text-muted: #7282a5;
+
+  --accent: #8b9eff;
+  --accent-secondary: #ba7cff;
+  --accent-tertiary: #42d9ff;
+
+  --border: rgba(139, 158, 255, 0.2);
+  --border-hover: rgba(139, 158, 255, 0.6);
+
+  --button-text: #080c1b;
+  --selection-text: #080c1b;
+
+  --glow-primary: rgba(103, 115, 255, 0.2);
+  --glow-secondary: rgba(174, 87, 255, 0.16);
+
+  --hero-gradient:
+    radial-gradient(
+      ellipse at 76% 10%,
+      rgba(77, 72, 192, 0.25),
+      transparent 36%
+    ),
+    radial-gradient(
+      ellipse at 80% 65%,
+      rgba(115, 47, 180, 0.13),
+      transparent 35%
+    ),
+    linear-gradient(145deg, #050c22 0%, #02040d 55%, #09051a 100%);
+
+  --panel-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+}
+
+/* ========================================
+   THEME TOKENS — OCEAN / LIGHT (DEEP SEA)
+======================================== */
+
+[data-theme="light"] {
+  color-scheme: dark;
+
+  --page-bg: #020b1d;
+  --page-bg-secondary: #04152e;
+
+  --surface: rgba(6, 26, 56, 0.65);
+  --surface-solid: #071a38;
+  --surface-hover: rgba(12, 48, 94, 0.82);
+
+  --text-primary: #eaf8ff;
+  --text-secondary: #a3c9de;
+  --text-muted: #6f9ab3;
+
+  --accent: #2ccbff;
+  --accent-secondary: #00d9ff;
+  --accent-tertiary: #5eead4;
+
+  --border: rgba(56, 189, 248, 0.24);
+  --border-hover: rgba(56, 189, 248, 0.65);
+
+  --button-text: #03121f;
+  --selection-text: #03121f;
+
+  --glow-primary: rgba(34, 211, 238, 0.28);
+  --glow-secondary: rgba(0, 217, 255, 0.2);
+
+  --hero-gradient:
+    radial-gradient(ellipse at 50% -10%, rgba(70, 200, 255, 0.55), transparent 55%),
+    radial-gradient(ellipse at 85% 70%, rgba(14, 165, 233, 0.22), transparent 45%),
+    linear-gradient(180deg, #0a4f7a 0%, #052d4f 28%, #031b33 58%, #020b1d 100%);
+
+  --panel-shadow: 0 15px 50px rgba(0, 12, 40, 0.55);
+}
+
+/* ========================================
+   APP ROOT
+======================================== */
+
+#root {
+  min-height: 100vh;
+}
+
+.app {
+  position: relative;
+  min-height: 100vh;
+  overflow: clip;
+  isolation: isolate;
+  background: var(--page-bg);
+  color: var(--text-primary);
+  transition:
+    background var(--transition-theme),
+    color var(--transition-theme);
+}
+
+.app,
+.app * {
+  transition-property: color, background-color, border-color, box-shadow;
+  transition-duration: 300ms;
+  transition-timing-function: ease;
+}
+
+.app button,
+.app a {
+  touch-action: manipulation;
+}
+
+.app button svg,
+.app a svg {
+  flex-shrink: 0;
+}
+
+/* ========================================
+   ATMOSPHERIC BACKGROUND
+======================================== */
+
+.theme-background {
+  position: absolute;
+  z-index: -5;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: var(--hero-gradient);
+  transition: background 600ms ease;
+}
+
+.theme-glow {
+  position: absolute;
+  width: 42vw;
+  height: 42vw;
+  min-width: 280px;
+  min-height: 280px;
+  border-radius: 50%;
+  background: var(--glow-primary);
+  filter: blur(100px);
+  opacity: 0.7;
+  animation: ambient-glow 12s ease-in-out infinite alternate;
+}
+
+.theme-glow-one {
+  top: -15%;
+  right: -10%;
+}
+
+.theme-glow-two {
+  bottom: -20%;
+  left: -15%;
+  background: var(--glow-secondary);
+  animation-delay: -5s;
+}
+
+.theme-particles {
+  position: absolute;
+  inset: -10%;
+  opacity: 0.5;
+  background-image:
+    radial-gradient(1px 1px at 30px 50px, var(--text-primary) 99%, transparent),
+    radial-gradient(
+      2px 2px at 140px 170px,
+      var(--accent-tertiary) 99%,
+      transparent
+    ),
+    radial-gradient(
+      1px 1px at 220px 80px,
+      var(--text-primary) 99%,
+      transparent
+    ),
+    radial-gradient(2px 2px at 90px 240px, var(--accent) 99%, transparent);
+  background-size: 270px 290px;
+  animation: particle-drift 45s linear infinite;
+}
+
+[data-theme="light"] .theme-particles {
+  opacity: 0.45;
+}
+
+/* ========================================
+   NAVBAR
+======================================== */
+
+.app-navbar {
+  position: relative;
+  z-index: 50;
+  display: flex;
+  min-height: 76px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 0 5%;
+  border-bottom: 1px solid var(--border);
+  background: color-mix(in srgb, var(--page-bg) 75%, transparent);
+  backdrop-filter: blur(20px);
+}
+
+.app-logo {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-primary);
+  font-size: 16px;
+  font-weight: 750;
+  letter-spacing: -0.4px;
+}
+
+.app-logo-icon {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--accent);
+  box-shadow: 0 0 25px var(--glow-primary);
+}
+
+.app-logo-highlight {
+  color: var(--accent);
+}
+
+.app-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(12px, 2.2vw, 30px);
+}
+
+.app-nav-link {
+  position: relative;
+  padding: 28px 0;
+  border: 0;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 500;
+  transition: color 250ms ease;
+}
+
+.app-nav-link::after {
+  position: absolute;
+  right: 0;
+  bottom: 18px;
+  left: 0;
+  height: 2px;
+  border-radius: 10px;
+  background: var(--accent);
+  content: "";
+  transform: scaleX(0);
+  transition: transform 250ms ease;
+}
+
+.app-nav-link:hover,
+.app-nav-link-active {
+  color: var(--text-primary);
+}
+
+.app-nav-link:hover::after,
+.app-nav-link-active::after {
+  transform: scaleX(1);
+}
+
+.app-nav-actions {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 12px;
+}
+
+.theme-toggle {
+  display: inline-flex;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--accent);
+  transition:
+    transform 250ms ease,
+    border-color 250ms ease,
+    background 300ms ease;
+}
+
+.theme-toggle:hover {
+  transform: rotate(-12deg) scale(1.06);
+  border-color: var(--border-hover);
+}
+
+.resume-link {
+  display: inline-flex;
+  min-height: 38px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 14px;
+  border: 1px solid var(--border);
+  border-radius: 25px;
+  background: var(--surface);
+  color: var(--text-primary);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.resume-link:hover {
+  border-color: var(--border-hover);
+  background: var(--surface-hover);
+}
+
+.mobile-menu-toggle {
+  display: none;
+  width: 38px;
+  height: 38px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--text-primary);
+}
+
+/* ========================================
+   SHARED BUTTONS
+======================================== */
+
+.btn-primary,
+.btn-secondary {
+  display: inline-flex;
+  min-height: 45px;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 0 18px;
+  border: 1px solid transparent;
+  border-radius: 28px;
+  font-size: 12px;
+  font-weight: 650;
+  transition:
+    transform 250ms ease,
+    box-shadow 250ms ease,
+    background 300ms ease,
+    border-color 250ms ease;
+}
+
+.btn-primary {
+  background: linear-gradient(110deg, var(--accent), var(--accent-secondary));
+  color: var(--button-text);
+  box-shadow: 0 0 25px var(--glow-primary);
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 0 35px var(--glow-primary);
+}
+
+.btn-secondary {
+  border-color: var(--border);
+  background: var(--surface);
+  color: var(--text-primary);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  transform: translateY(-3px);
+  border-color: var(--border-hover);
+  background: var(--surface-hover);
+}
+
+/* ========================================
+   GLASS PANELS
+======================================== */
+
+.glass-panel {
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--surface);
+  box-shadow: var(--panel-shadow);
+  backdrop-filter: blur(18px);
+}
+
+.glass-panel:hover {
+  border-color: var(--border-hover);
+}
+
+/* ========================================
+   THEME TRANSITION OVERLAY
+======================================== */
+
+.theme-transition-overlay {
+  position: fixed;
+  z-index: 200;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: var(--page-bg);
+  animation: theme-reveal 650ms ease both;
+}
+
+/* ========================================
+   SCROLLBAR
+======================================== */
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) var(--page-bg-secondary);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--page-bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  border: 2px solid var(--page-bg-secondary);
+  border-radius: 20px;
+  background: var(--accent);
+}
+
+/* ========================================
+   ANIMATIONS
+======================================== */
+
+@keyframes ambient-glow {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  100% {
+    transform: translate3d(-5%, 8%, 0) scale(1.15);
+  }
+}
+
+@keyframes particle-drift {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(-70px, -100px, 0);
+  }
+}
+
+@keyframes theme-reveal {
+  0% {
+    opacity: 0;
+  }
+
+  40% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes orbit {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ========================================
+   RESPONSIVE DESIGN
+======================================== */
+
+@media (max-width: 1050px) {
+  .app-navbar {
+    padding-right: 3%;
+    padding-left: 3%;
+  }
+
+  .app-nav {
+    gap: 14px;
+  }
+
+  .app-nav-link {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 760px) {
+  .app-navbar {
+    min-height: 68px;
+    gap: 10px;
+    padding: 0 17px;
+  }
+
+  .app-logo {
+    gap: 8px;
+    font-size: 14px;
+  }
+
+  .app-logo-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .app-nav {
+    position: absolute;
+    top: calc(100% + 1px);
+    right: 12px;
+    left: 12px;
+    display: none;
+    align-items: stretch;
+    gap: 0;
+    padding: 8px;
+    border: 1px solid var(--border);
+    border-radius: 15px;
+    background: var(--surface-solid);
+    box-shadow: var(--panel-shadow);
+    backdrop-filter: blur(20px);
+  }
+
+  .app-nav-open {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .app-nav-link {
+    padding: 13px 12px;
+    text-align: left;
+  }
+
+  .app-nav-link::after {
+    right: auto;
+    bottom: 7px;
+    left: 12px;
+    width: 25px;
+  }
+
+  .mobile-menu-toggle {
+    display: inline-flex;
+  }
+
+  .app-nav-actions {
+    gap: 7px;
+  }
+
+  .theme-toggle {
+    width: 35px;
+    height: 35px;
+  }
+
+  .resume-link {
+    min-height: 34px;
+    padding: 0 10px;
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 390px) {
+  .app-navbar {
+    padding: 0 11px;
+  }
+
+  .app-logo {
+    gap: 6px;
+    font-size: 12px;
+  }
+
+  .app-logo-icon {
+    width: 29px;
+    height: 29px;
+  }
+
+  .app-nav-actions {
+    gap: 5px;
+  }
+
+  .resume-link {
+    padding: 0 8px;
+  }
+}
+
+/* ========================================
+   ACCESSIBILITY
+======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+[data-theme="light"] .theme-particles {
+  opacity: 0.45;
+}
+
+/* ========================================
+   LIGHT THEME BOOSTS
+======================================== */
+
+[data-theme="light"] .theme-glow {
+  opacity: 0.9;
+  filter: blur(80px);
+}
+
+[data-theme="light"] .theme-glow-one {
+  background: rgba(44, 203, 255, 0.35);
+}
+
+[data-theme="light"] .theme-glow-two {
+  background: rgba(0, 180, 255, 0.28);
+}
+
+[data-theme="light"] .theme-particles {
+  opacity: 0.45;
+}
+
+/* ========================================
+   CUSTOM UTILITIES
+======================================== */
+
+.glow-text {
+  text-shadow: 0 0 20px var(--glow-primary);
+}
+
+.glow-box {
+  box-shadow: 0 0 30px var(--glow-primary);
+}
+
+.portal-ring {
+  box-shadow: 0 0 45px var(--glow-primary), inset 0 0 30px var(--glow-secondary);
+}
